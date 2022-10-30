@@ -21,12 +21,14 @@ export default {
   },
   data() {
     return {
-      auth : null
+      auth : {}
     }
   },
-  created() {
+  async created() {
+    await this.auth_store.fetch()
     if (this.auth_store.isAuthen) {
       this.auth = this.auth_store.getAuth
+
     } else {
       this.auth = null
     }

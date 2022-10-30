@@ -67,7 +67,7 @@ const router = createRouter({
       component: () => import('@/views/novels/ShowNovelView.vue')
     },
     {
-      path: '/novels/episodes/:id',
+      path: '/episodes/:id',
       name: 'episodes.show',
       component: () => import('@/views/novels/ShowEpisodeView.vue')
     },
@@ -95,8 +95,17 @@ const router = createRouter({
       path: '/MyNovels',
       name: 'MyNovels',
       component: () => import('@/views/novels/MyNovels.vue')
+    },
+    {
+      path: '/editNovel/:id',
+      name: 'editNovel.edit',
+      component: () => import('@/views/novels/EditNovel.vue')
+    },
+    {
+      path: '/editEpisode/:id',
+      name: 'editEpisode.edit',
+      component: () => import('@/views/novels/EditEpisode.vue')
     }
-
   ]
 })
 

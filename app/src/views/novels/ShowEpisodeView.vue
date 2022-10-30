@@ -79,7 +79,7 @@ export default {
   data () {
     return {
       error : null,
-      episode : null,
+      episode : {},
       messsage : null
     }
   },

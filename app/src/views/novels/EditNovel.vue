@@ -1,6 +1,7 @@
 <template>
+
   <div class="m-8">
-    <h1 class="text-4xl"> Create Novel </h1>
+    <h1 class="text-4xl"> edit Novel </h1>
 
     <div class="m-4">
       <label for="name">name</label>
@@ -12,24 +13,14 @@
       <textarea name="" id="" cols="100" rows="10" v-model="novel.detail"> </textarea>
     </div>
 
-    <label class="col-md-4 col-form-label text-md-right">Avatar</label>
-    <div class="col-md-6">
-      <div class="custom-file">
-        <!-- MOST IMPORTANT - SEE "ref" AND "@change" PROPERTIES -->
-        <input type="file" class="custom-file-input" id="customFile"
-               ref="file" @change="handleFileObject()">
-        <label class="custom-file-label text-left" for="customFile">chosse pics</label>
-      </div>
-    </div>
-
     <div class="m-4">
-      <label for="user_id"> user_id </label>
-      <input type="number" v-model="novel.user_id" >
+      <label for="novel_id"> novel_id </label>
+      <input type="number" v-model="novel.user_id">
     </div>
 
-    <button @click="saveNovel()"
-        class="px-4 py-2 rounded-lg bg-green-400">
-      Create
+    <button @click="EditNovel()"
+            class="px-4 py-2 rounded-lg bg-green-400">
+      edit
     </button>
     <div v-if=" loadss == null" role="status">
       <svg class="block w-32 h-32 mx-auto text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -38,6 +29,7 @@
       </svg>
       <span class="sr-only">Loading...</span>
     </div>
+
   </div>
 </template>
 
@@ -46,9 +38,7 @@ import { useAuthStore } from '@/stores/auth.js'
 export default {
   setup() {
     const auth_store = useAuthStore()
-
     return { auth_store }
-
   },
   data() {
     return {
@@ -57,47 +47,43 @@ export default {
         detail : "",
         user_id : 1
       },
-      auth: null,
-      loadss : 1,
-      image : null
+      loadss : 1
     }
   },
   methods: {
-    async saveNovel(){
+    async EditNovel(){
       this.loadss = null
-      let novel = new FormData()
-      novel.append('image', this.image);
-      novel.append('name', this.novel.name)
-      novel.append('detail', this.novel.detail)
-      novel.append('user_id', this.novel.user_id)
-
       try {
-        const response = await this.$axios.post('novels' , novel,
-            {
-              headers: {
-                'Content-Type': 'multipart/form-data'
-              }})
-        if (response.status === 201){
-          await this.auth_store.fetch()
-          let novel_id = response.data.novel_id
-          this.$router.push(`/novels/${novel_id}`)
+        const response = await this.$axios.put(`/novels/${this.$route.params.id}` , this.novel)
+        if (response.status === 200){
+          this.$router.push(`/novels/${this.$route.params.id}`)
         }
       } catch (error){
         this.error = error.message
         console.log(error)
       }
-    },
-    handleFileObject(){
-      this.image = this.$refs.file.files[0];
     }
   },
-  created() {
+  async created() {
+    const id = this.$route.params.id
+    try {
+      const response = await this.$axios.get(`/novels/${id}`)
+      if (response.status === 200){
+        this.novel = response.data.data
+        this.loadss = 0
+      }
+    }catch (error){
+      console.log(error)
+      this.error = error.message
+    }
+
     if (this.auth_store.isAuthen) {
       this.auth = this.auth_store.getAuth
       this.novel.user_id = this.auth.id
     } else {
       this.auth = null
     }
+
   }
 }
 </script>
