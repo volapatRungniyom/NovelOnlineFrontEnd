@@ -22,13 +22,13 @@
       </div>
     </div>
 
-    <div class="m-4">
+    <div class="m-4" hidden>
       <label for="user_id"> user_id </label>
       <input type="number" v-model="novel.user_id" >
     </div>
 
     <button @click="saveNovel()"
-        class="px-4 py-2 rounded-lg bg-green-400">
+        class="px-4 py-2 rounded-lg bg-green-400 mt-3">
       Create
     </button>
     <div v-if=" loadss == null" role="status">
@@ -46,7 +46,6 @@ import { useAuthStore } from '@/stores/auth.js'
 export default {
   setup() {
     const auth_store = useAuthStore()
-
     return { auth_store }
 
   },
@@ -97,6 +96,8 @@ export default {
       this.novel.user_id = this.auth.id
     } else {
       this.auth = null
+      this.$router.push("/login")
+      alert("please Login")
     }
   }
 }

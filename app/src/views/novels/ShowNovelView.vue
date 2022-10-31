@@ -1,17 +1,33 @@
 <template >
   <div class="m-5">
-    <div class="text-4xl">
+    <div class="border-2  w-96 bg-gray-100">
+      <img class="object-fill h-96 w-96" :src="`http://localhost/storage/image/${novel.image}`" >
+    </div>
+
+    <div class="text-4xl m-4">
       {{ novel.name }}
     </div>
 
-    <div class="text-2xl whitespace-pre-wrap">
-      <div>
-        เรื่องย่อ
+    <div class="text-2xl whitespace-pre-wrap ">
+      <div class="px-2 pt-4 pb-2">
+        <h1 class="text-4xl ">
+          เรื่องย่อ
+        </h1>
       </div>
       {{ novel.detail }}
     </div>
-    <div v-if="novel.tags" class="well">
-      <div class="px-6 pt-4 pb-2">
+
+      <div class="px-2 pt-4 pb-2">
+        <div v-for=" user in novel.user" :key = "user.id" >
+          <div v-if="user.pivot.is_owner === 1">
+            <h1 class="text-4xl">
+              Author : {{user.name }}
+            </h1>
+          </div>
+        </div>
+
+
+      <div v-if="novel.tags" class="well mt-5">
         <span v-for=" tag in novel.tags" :key = "tag.id" class="inline-block bg-gray-200 rounded-full
         px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
           #{{tag.name }}
@@ -28,14 +44,26 @@
       </div>
     </div>
 
-    <div v-if="novel !== {}">
-      <button @click="CreateEpisode()" class="px-4 py-2 rounded-lg bg-green-400">
-        Create Episode
-      </button>
-      <button @click="EditNovel()" class="px-4 py-2 rounded-lg bg-blue-400">
-        EditNovel
-      </button>
-      <div v-if="check" >
+    <div v-if="auth">
+    <div v-for=" user in novel.user" :key = "user.id" hidden>
+      <div v-if="user.pivot.is_owner === 1 && auth.id === user.id ">
+        {{ is_author = true }}
+      </div>
+    </div>
+    </div>
+
+    <div v-if="auth">
+        <div v-if="is_author">
+          <button @click="CreateEpisode()" class="px-4 py-2 rounded-lg bg-green-400">
+            Create Episode
+         </button>
+         <button @click="EditNovel()" class="px-4 py-2 rounded-lg bg-blue-400">
+           EditNovel
+         </button>
+        </div>
+    </div>
+    <div v-if="auth">
+    <div v-if="check" >
         <button @click="updateLibary()" id="myLibrary" value="123" class="px-4 py-2 rounded-lg bg-yellow-400" >
           novel in my library
         </button>
@@ -47,6 +75,8 @@
       </div>
     </div>
 
+
+
     <div v-if="loadss === 1" role="status">
       <svg class="block w-32 h-32 mx-auto text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
@@ -54,25 +84,57 @@
       </svg>
       <span class="sr-only">Loading...</span>
     </div>
+
+
+
     <div v-if="novel.episodes" class="well" >
+      Episode
       <div v-for=" episode in novel.episodes" :key="episode.id">
         <div class="p-4 mb-d border-2 border-blue-800 rounded-lg m-4 cursor-pointer" @click="ShowEpisode(episode)">
           <div class="text-3xl">
             {{ episode.name}}
           </div>
         </div>
-        <button @click="EditEpisode(episode.id)"
-                class="bg-gray-300 hover:bg-red-400 text-gray-800 font-bold py-2 px-4 rounded-r ml-2" >
-          Edit
-        </button>
+        <div v-if="is_author">
+          <button @click="EditEpisode(episode.id)"
+                  class="bg-gray-300 hover:bg-red-400 text-gray-800 font-bold py-2 px-4 rounded-r ml-2" >
+            Edit
+          </button>
+        </div>
       </div>
     </div>
+
+    <div v-if="novel.comments" class="well" >
+      <h1>Comment</h1>
+      <div v-if="auth">
+      <div>
+        <div class="m-4">
+          <label for="detail"> message </label>
+          <textarea name="" id="" cols="100" rows="10" v-model="comment.message"> </textarea>
+        </div>
+        <button v-on:click="AddComment()" class="bg-gray-300 hover:bg-red-400 text-gray-800 font-bold py-2 px-4 rounded-r ml-2">
+          AddComment
+        </button>
+      </div>
+      </div>
+
+      <div v-for=" comment in data" >
+        <div class="p-4 mb-d border-2 border-green-800 rounded-lg m-4 ">
+          <div class="text-3xl">
+            {{ comment }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+
   </div>
 
 </template>
 
 <script >
 import { useAuthStore } from '@/stores/auth.js'
+
 export default {
   setup() {
     const auth_store = useAuthStore()
@@ -88,7 +150,13 @@ export default {
       id_novel: this.$route.params.id,
       user : {
         user_id : 1
-      }
+      },
+      data : [],
+      comment : {
+        message : "",
+        novel_id : this.$route.params.id
+      },
+      is_author : false
     }
   },
   async created() {
@@ -97,6 +165,10 @@ export default {
       const response = await this.$axios.get(`/novels/${id}`)
       if (response.status === 200){
         this.novel = response.data.data
+        for (var i in this.novel.comments){
+          this.data.push(this.novel.comments[i].message)
+        }
+
         this.loadss = 0
       }
     }catch (error){
@@ -144,7 +216,19 @@ export default {
     },
     EditEpisode(id){
       this.$router.push(`/editEpisode/${id}`)
+    },
+    async AddComment(){
+      try {
+        const response = await this.$axios.post(`/commentNovels`,this.comment)
+        if (response.status === 201){
+          this.data.push(this.comment.message)
+        }
+      }catch (error){
+        this.error = error.message
+        console.log(error)
+      }
     }
   }
 }
 </script>
+

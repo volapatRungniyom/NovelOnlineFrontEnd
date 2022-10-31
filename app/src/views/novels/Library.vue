@@ -2,12 +2,14 @@
   <h1 class="text-center text-6xl">
     Libary
   </h1>
-  <div class="grid grid-cols-3 gap-4">
-    <NovelCard v-for="libary in auth.libary"
+  <div v-if="auth">
+    <div class="grid grid-cols-3 gap-4">
+      <NovelCard v-for="libary in auth.libary"
                :key = "libary.id"
                :novel = "libary"
-    >
-    </NovelCard>
+      >
+      </NovelCard>
+    </div>
   </div>
 </template>
 
@@ -25,8 +27,8 @@ export default {
     }
   },
   async created() {
-    await this.auth_store.fetch()
     if (this.auth_store.isAuthen) {
+      await this.auth_store.fetch()
       this.auth = this.auth_store.getAuth
 
     } else {

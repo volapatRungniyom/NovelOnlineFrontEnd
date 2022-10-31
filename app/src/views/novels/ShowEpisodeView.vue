@@ -23,7 +23,6 @@
                   class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r ml-2" v-if="episode.next != null">
         next
       </RouterLink>
-
     </div>
   </div>
 
@@ -63,14 +62,26 @@
       </RouterLink>
   </div>
 
-    <div v-if="episode.comment" class="well">
-      <div class="text-2xl">
-        Comment
+  <div v-if="episode.comment" class="well" >
+    <h1>Comment</h1>
+    <div>
+      <div class="m-4">
+        <label for="detail"> message </label>
+        <textarea name="" id="" cols="100" rows="10" v-model="comments.message"> </textarea>
       </div>
-      <div v-for=" comment in episode.comment" :key = "comment.id" class="p-4 mb-d border-2 border-blue-800 rounded-lg m-4">
-        {{ comment.message }}
+      <button v-on:click="AddComment()" class="bg-gray-300 hover:bg-red-400 text-gray-800 font-bold py-2 px-4 rounded-r ml-2">
+        AddComment
+      </button>
+    </div>
+    <div v-for=" comment in data" >
+      <div class="p-4 mb-d border-2 border-green-800 rounded-lg m-4 ">
+        <div class="text-3xl">
+          {{ comment }}
+        </div>
       </div>
     </div>
+  </div>
+
 
 </template>
 
@@ -80,7 +91,12 @@ export default {
     return {
       error : null,
       episode : {},
-      messsage : null
+      messsage : null,
+      comments : {
+        messsage : '',
+        episode_id : this.$route.params.id
+      },
+      data: []
     }
   },
   async created() {
@@ -89,6 +105,10 @@ export default {
       const response = await this.$axios.get(`/novels/episodes/${id}`)
       if (response.status === 200){
         this.episode = response.data.data
+        for (var i in this.episode.comment){
+          this.data.push(this.episode.comment[i].message)
+        }
+
       }
     }catch (error){
       console.log(error)
@@ -103,6 +123,11 @@ export default {
         if (response.status === 200){
           this.episode = response.data.data
           this.messsage = null
+          this.data = []
+          for (var i in this.episode.comment){
+            this.data.push(this.episode.comment[i].message)
+          }
+
         }
       }catch (error){
         console.log(error)
@@ -112,7 +137,19 @@ export default {
   },methods : {
     check(){
       this.messsage = 1
-    }
+    },
+    async AddComment(){
+      try {
+        const response = await this.$axios.post(`/commentEpisodes`,this.comments)
+        if (response.status === 201){
+          this.data.push(this.comments.message)
+          this.comments.message = ""
+        }
+      }catch (error){
+        this.error = error.message
+        console.log(error)
+      }
+   }
   }
 }
 </script>

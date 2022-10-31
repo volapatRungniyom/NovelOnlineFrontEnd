@@ -1,7 +1,10 @@
 <template>
-  <h2>
+  <h2 class="text-4xl text-center">
     {{ title }}
   </h2>
+
+
+
 
   <div v-if="novels == null" role="status">
     <svg class="block w-32 h-32 mx-auto text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -11,15 +14,16 @@
     <span class="sr-only">Loading...</span>
   </div>
 
-  <div class="grid grid-cols-3 gap-4">
-    <NovelCard v-for="novel in novels"
+  <div class="md:flex md:justify-center ">
+    <div class="grid grid-cols-3 gap-4 w-11/12 ">
+      <NovelCard v-for="novel in novels"
                  :key = "novel.id"
-                  :novel = "novel"
+                 :novel = "novel"
       >
       </NovelCard>
+    </div>
   </div>
 
-  {{selected}}
 </template>
 
 <script>
