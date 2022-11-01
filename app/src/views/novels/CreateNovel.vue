@@ -12,13 +12,13 @@
       <textarea name="" id="" cols="100" rows="10" v-model="novel.detail"> </textarea>
     </div>
 
-    <label class="col-md-4 col-form-label text-md-right">Avatar</label>
+    <label class="col-md-4 col-form-label text-md-right">Novel Image</label>
     <div class="col-md-6">
       <div class="custom-file">
         <!-- MOST IMPORTANT - SEE "ref" AND "@change" PROPERTIES -->
         <input type="file" class="custom-file-input" id="customFile"
                ref="file" @change="handleFileObject()">
-        <label class="custom-file-label text-left" for="customFile">chosse pics</label>
+        <label class="custom-file-label text-left" for="customFile"></label>
       </div>
     </div>
 

@@ -8,6 +8,19 @@
       {{ novel.name }}
     </div>
 
+    <div class="px-2 pt-4 pb-2">
+      <div v-for=" user in novel.user" :key = "user.id" >
+        <div v-if="user.pivot.is_owner === 1">
+          <div @click="ShowUser(user)" class="cursor-pointer" >
+              <img class="w-10 h-10 inline-block mr-2 rounded-full dark:bg-gray-500 aspect-square"
+                   :src="`http://localhost/storage/image/${user.image_path}`" />
+              <h1 class="text-3xl inline-block">
+                {{user.name }}
+              </h1>
+            </div>
+        </div>
+      </div>
+
     <div class="text-2xl whitespace-pre-wrap ">
       <div class="px-2 pt-4 pb-2">
         <h1 class="text-4xl ">
@@ -16,16 +29,6 @@
       </div>
       {{ novel.detail }}
     </div>
-
-      <div class="px-2 pt-4 pb-2">
-        <div v-for=" user in novel.user" :key = "user.id" >
-          <div v-if="user.pivot.is_owner === 1">
-            <h1 class="text-4xl">
-              Author : {{user.name }}
-            </h1>
-          </div>
-        </div>
-
 
       <div v-if="novel.tags" class="well mt-5">
         <span v-for=" tag in novel.tags" :key = "tag.id" class="inline-block bg-gray-200 rounded-full
@@ -75,8 +78,6 @@
       </div>
     </div>
 
-
-
     <div v-if="loadss === 1" role="status">
       <svg class="block w-32 h-32 mx-auto text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
@@ -84,8 +85,6 @@
       </svg>
       <span class="sr-only">Loading...</span>
     </div>
-
-
 
     <div v-if="novel.episodes" class="well" >
       Episode
@@ -227,6 +226,9 @@ export default {
         this.error = error.message
         console.log(error)
       }
+    },
+    ShowUser(user){
+      this.$router.push(`/UserProfile/${user.id}`)
     }
   }
 }

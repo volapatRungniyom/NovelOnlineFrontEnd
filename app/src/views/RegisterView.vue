@@ -1,7 +1,7 @@
 <template>
 
   <div class="m-8">
-    <h1 class="text-4xl"> Create Novel </h1>
+    <h1 class="text-4xl"> Register </h1>
 
     <div class="m-4">
       <label for="name">name</label>
@@ -16,6 +16,16 @@
     <div class="m-4">
       <label for="password"> password </label>
       <input type="text" v-model="user.password">
+    </div>
+
+    <label class="col-md-4 col-form-label text-md-right">Profile Image</label>
+    <div class="col-md-6">
+      <div class="custom-file">
+        <!-- MOST IMPORTANT - SEE "ref" AND "@change" PROPERTIES -->
+        <input type="file" class="custom-file-input" id="customFile"
+               ref="file" @change="handleFileObject()">
+        <label class="custom-file-label text-left" for="customFile"></label>
+      </div>
     </div>
 
     <button @click="createUser()"
@@ -42,24 +52,34 @@ export default {
         email : "",
         password : ""
       },
-      loadss : 1
+      loadss : 1,
+      image : null
     }
   },
   methods: {
     async createUser(){
       this.loadss = null
+      let user = new FormData()
+      user.append('image', this.image);
+      user.append('name', this.user.name)
+      user.append('email', this.user.email)
+      user.append('password', this.user.password)
       try {
-        const response = await this.$axios.post('/users' , this.user)
+        const response = await this.$axios.post('/users' ,  user,
+            {
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              }})
         if (response.status === 201){
-          //let user_id = response.data.reward_id
-          //this.$router.push(`novels/${novel.id}`)
           this.$router.push('/login')
-          //this.$router.push(`/novels/${novel_id}`)
         }
       } catch (error){
         this.error = error.message
         console.log(error)
       }
+    },
+    handleFileObject(){
+      this.image = this.$refs.file.files[0];
     }
   }
 }

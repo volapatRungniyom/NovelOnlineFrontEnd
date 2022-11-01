@@ -105,6 +105,16 @@ const router = createRouter({
       path: '/editEpisode/:id',
       name: 'editEpisode.edit',
       component: () => import('@/views/novels/EditEpisode.vue')
+    },
+    {
+      path: '/MyProfile',
+      name: 'MyProfile',
+      component: () => import('@/views/users/MyProfile.vue')
+    },
+    {
+      path: '/UserProfile/:id',
+      name: 'UserProfile',
+      component: () => import('@/views/users/UserProfile.vue')
     }
   ]
 })

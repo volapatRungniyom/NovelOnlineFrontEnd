@@ -6,11 +6,11 @@ import Profile from '@/components/profile/Profile.vue'
 </script>
 
 <template >
-  <header class="bg-[#49EAEF] mb-5">
+  <header class="bg-[#49EAEF] mb-5 h-24">
     <nav class="relative flex flex-wrap items-center justify-between ">
       <div class="container px-4 mx-auto flex flex-wrap items-center justify-between">
         <div class="w-full relative flex justify-between lg:w-auto  px-4 lg:static lg:block lg:justify-start">
-          <a class="text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-white" href="#pablo">
+          <a class="text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-white">
             <Profile></Profile>
           </a>
           <button class="cursor-pointer text-xl leading-none px-3 py-1 border border-solid border-transparent rounded bg-transparent block lg:hidden outline-none focus:outline-none" type="button">
@@ -20,21 +20,21 @@ import Profile from '@/components/profile/Profile.vue'
           </button>
         </div>
         <div class="lg:flex flex-grow items-center" id="example-navbar-warning">
-          <ul class="flex flex-col lg:flex-row list-none ml-auto">
-            <li class="nav-item">
-              <RouterLink to="/">Home</RouterLink>
+          <ul class="flex flex-col lg:flex-row list-none ml-auto text-2xl font-bold ">
+            <li class="nav-item ">
+              <RouterLink class="hover:drop-shadow-lg " to="/">Home</RouterLink>
             </li>
             <li class="nav-item">
-              <RouterLink to="/novels">Novels</RouterLink>
+              <RouterLink class="hover:drop-shadow-lg " to="/novels">Novels</RouterLink>
             </li>
             <li class="nav-item">
-              <RouterLink to="/createNovel">Create Novel</RouterLink>
+              <RouterLink class="hover:drop-shadow-lg " to="/createNovel">Create Novel</RouterLink>
             </li>
             <li class="nav-item">
-              <RouterLink to="/Library">Library</RouterLink>
+              <RouterLink class="hover:drop-shadow-lg " to="/Library">Library</RouterLink>
             </li>
             <li class="nav-item">
-              <RouterLink to="/MyNovels">MyNovels</RouterLink>
+              <RouterLink class="hover:drop-shadow-lg " to="/MyNovels">My Novels</RouterLink>
             </li>
           </ul>
         </div>
