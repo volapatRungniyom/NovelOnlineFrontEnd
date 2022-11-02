@@ -13,9 +13,17 @@
       <textarea name="" id="" cols="100" rows="10" v-model="novel.detail"> </textarea>
     </div>
 
-    <div class="m-4">
+    <div class="m-4" hidden>
       <label for="novel_id"> novel_id </label>
       <input type="number" v-model="novel.user_id">
+    </div>
+
+    <div class="col-md-6 m-3">
+      <div class="custom-file">
+        <input type="file" class="custom-file-input" id="customFile"
+               ref="file" @change="handleFileObject()">
+        <label class="custom-file-label text-left" for="customFile"></label>
+      </div>
     </div>
 
     <button @click="EditNovel()"
@@ -47,14 +55,21 @@ export default {
         detail : "",
         user_id : 1
       },
-      loadss : 1
+      loadss : 1,
+      image : null
     }
   },
   methods: {
     async EditNovel(){
       this.loadss = null
+      let profile = new FormData()
+      if (this.image){
+        profile.append('image', this.image);
+      }
+      profile.append('name', this.novel.name);
+      profile.append('detail', this.novel.detail);
       try {
-        const response = await this.$axios.put(`/novels/${this.$route.params.id}` , this.novel)
+        const response = await this.$axios.post(`/NovelEdit/${this.$route.params.id}` , profile)
         if (response.status === 200){
           this.$router.push(`/novels/${this.$route.params.id}`)
         }
@@ -62,6 +77,9 @@ export default {
         this.error = error.message
         console.log(error)
       }
+    },
+    handleFileObject(){
+      this.image = this.$refs.file.files[0];
     }
   },
   async created() {

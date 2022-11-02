@@ -61,3 +61,50 @@ export const rewardAPI = {
     }
   }
 }
+
+export const tagAPI = {
+  async getAll () {
+    const response = await axiosInstance.get('/tags')
+    if (response.status == 200) {
+      return response.data.data
+    }
+    return []
+  },
+  async saveNew (tag) {
+    const response = await axiosInstance.post('/tags', tag)
+    if (response.status == 201) {
+      return response.data
+    }
+    return {
+      success: false
+    }
+  },
+  async addTagNovel (tag_id,novel_id) {
+    const response = await axiosInstance.put(`/tags/${tag_id}`, novel_id)
+    if (response.status == 200) {
+      return response.data
+    }
+    return {
+      success: false
+    }
+  }
+}
+
+export const novelAPI = {
+  async getAll () {
+    const response = await axiosInstance.get('/novels')
+    if (response.status == 200) {
+      return response.data.data
+    }
+    return []
+  },
+  async saveNew (novel) {
+    const response = await axiosInstance.post('/novels', novel)
+    if (response.status == 201) {
+      return response.data
+    }
+    return {
+      success: false
+    }
+  }
+}

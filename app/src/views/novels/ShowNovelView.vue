@@ -31,19 +31,10 @@
     </div>
 
       <div v-if="novel.tags" class="well mt-5">
-        <span v-for=" tag in novel.tags" :key = "tag.id" class="inline-block bg-gray-200 rounded-full
+        <span v-for=" tag in tagshow" class="inline-block bg-gray-200 rounded-full
         px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-          #{{tag.name }}
+          #{{tag}}
         </span>
-      </div>
-    </div>
-
-    <div v-if="auth">
-      <div v-for="libary in auth.libary"
-          :key = "libary.id" >
-        <div v-if="libary.id+'' === $route.params.id+''" hidden>
-          <div>{{ check = true }}</div>
-        </div>
       </div>
     </div>
 
@@ -57,12 +48,25 @@
 
     <div v-if="auth">
         <div v-if="is_author">
-          <button @click="CreateEpisode()" class="px-4 py-2 rounded-lg bg-green-400">
+          <button @click="CreateEpisode()"
+                  class="text-white py-2 px-4 uppercase rounded bg-blue-400 hover:bg-blue-500 shadow hover:shadow-lg font-medium transition transform hover:-translate-y-0.5"
+          >
             Create Episode
          </button>
-         <button @click="EditNovel()" class="px-4 py-2 rounded-lg bg-blue-400">
+         <button @click="EditNovel()"
+                 class="text-white py-2 px-4 uppercase rounded bg-blue-400 hover:bg-blue-500 shadow hover:shadow-lg font-medium transition transform hover:-translate-y-0.5"
+         >
            EditNovel
          </button>
+          <select class="form-control" v-model="selected" >
+            <option v-for="tag in tags" v-bind:value="tag" >{{ tag.name }}</option>
+          </select>
+
+          <button @click="addTag()"
+                  class="text-white py-2 px-4 uppercase rounded bg-blue-400 hover:bg-blue-500 shadow hover:shadow-lg font-medium transition transform hover:-translate-y-0.5"
+          >
+            add Tag or delete
+          </button>
         </div>
     </div>
     <div v-if="auth">
@@ -91,7 +95,8 @@
       <div v-for=" episode in novel.episodes" :key="episode.id">
         <div class="p-4 mb-d border-2 border-blue-800 rounded-lg m-4 cursor-pointer" @click="ShowEpisode(episode)">
           <div class="text-3xl">
-            {{ episode.name}}
+            {{ episode.name}}-----
+            {{ adddate(episode.created_at)}}
           </div>
         </div>
         <div v-if="is_author">
@@ -102,6 +107,7 @@
         </div>
       </div>
     </div>
+
 
     <div v-if="novel.comments" class="well" >
       <h1>Comment</h1>
@@ -133,6 +139,7 @@
 
 <script >
 import { useAuthStore } from '@/stores/auth.js'
+import { tagAPI } from '@/services/api.js'
 
 export default {
   setup() {
@@ -155,27 +162,49 @@ export default {
         message : "",
         novel_id : this.$route.params.id
       },
-      is_author : false
+      is_author : false,
+      tags : {},
+      tagshow : [],
+      selected : null,
+      novelTag : {
+        novel_id : 1
+      }
     }
   },
   async created() {
     const id = this.$route.params.id
     try {
       const response = await this.$axios.get(`/novels/${id}`)
+      this.tags = await tagAPI.getAll()
+      this.selected = this.tags[0]
+
       if (response.status === 200){
         this.novel = response.data.data
+        this.novelTag.novel_id = this.novel.id
+        this.loadss = 0
         for (var i in this.novel.comments){
           this.data.push(this.novel.comments[i].message)
         }
 
-        this.loadss = 0
+        for (var a in this.novel.tags){
+          this.tagshow.push(this.novel.tags[a].name)
+        }
+
       }
     }catch (error){
       console.log(error)
       this.error = error.message
     }
     if (this.auth_store.isAuthen) {
+      await this.auth_store.fetch()
       this.auth = this.auth_store.getAuth
+
+
+      for (var x in this.auth.libary){
+        if (this.$route.params.id.toString() === this.auth.libary[x].id.toString()){
+          this.check = true
+        }
+      }
 
     } else {
       this.auth = null
@@ -229,8 +258,23 @@ export default {
     },
     ShowUser(user){
       this.$router.push(`/UserProfile/${user.id}`)
+    },
+    adddate(date){
+      let currDateLocal = new Date(date).toLocaleString('en-US', {
+        timeZone: 'Asia/Bangkok',
+      });
+      return currDateLocal
+    },
+    async addTag(){
+      if (this.tagshow.includes(this.selected.name)){
+        let index = this.tagshow.indexOf(this.selected.name);
+        this.tagshow.splice(index,1)
+
+      }else {
+        this.tagshow.push(this.selected.name)
+      }
+      const response = await tagAPI.addTagNovel(this.selected.id,this.novelTag)
     }
   }
 }
 </script>
-
