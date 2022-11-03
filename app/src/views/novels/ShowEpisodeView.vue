@@ -6,6 +6,7 @@
     </svg>
     <span class="sr-only">Loading...</span>
   </div>
+
   <div class="inline-flex" @click="check">
 
     <div class="inline-flex">

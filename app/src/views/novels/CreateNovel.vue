@@ -90,8 +90,9 @@ export default {
       this.image = this.$refs.file.files[0];
     }
   },
-  created() {
+  async created() {
     if (this.auth_store.isAuthen) {
+      await this.auth_store.fetch()
       this.auth = this.auth_store.getAuth
       this.novel.user_id = this.auth.id
     } else {

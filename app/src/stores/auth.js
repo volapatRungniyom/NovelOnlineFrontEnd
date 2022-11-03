@@ -10,8 +10,8 @@ const auth_storage = {
   libary: localStorage.getItem('auth.libary'),
   author: localStorage.getItem('auth.author'),
   following: localStorage.getItem('auth.following'),
-  followers: localStorage.getItem('auth.followers')
-
+  followers: localStorage.getItem('auth.followers'),
+  role: localStorage.getItem('auth.role')
 }
 
 export const useAuthStore = defineStore({
@@ -27,7 +27,8 @@ export const useAuthStore = defineStore({
         libary: auth_storage.libary,
         author: auth_storage.author,
         following: auth_storage.following,
-        followers: auth_storage.followers
+        followers: auth_storage.followers,
+        role: auth_storage.role
       }
     }
   },
@@ -52,6 +53,8 @@ export const useAuthStore = defineStore({
     getFollowing: (state) => state.auth.following,
 
     getFollower: (state) => state.auth.followers,
+
+    getRole: (state) => state.auth.role,
 
 
     isAuthen (state) {
@@ -79,8 +82,7 @@ export const useAuthStore = defineStore({
       localStorage.setItem('auth.image_path', this.auth.image_path)
       localStorage.setItem('auth.following', this.auth.following)
       localStorage.setItem('auth.followers', this.auth.followers)
-
-
+      localStorage.setItem('auth.role', this.auth.role)
     },
 
     logout () {
@@ -94,6 +96,8 @@ export const useAuthStore = defineStore({
       localStorage.removeItem('auth.image_path')
       localStorage.removeItem('auth.following')
       localStorage.removeItem('auth.followers')
+      localStorage.removeItem('auth.role')
+
 
       this.auth = {
         email: null,
@@ -104,7 +108,8 @@ export const useAuthStore = defineStore({
         author: null,
         image_path: null,
         following: null,
-        followers: null
+        followers: null,
+        role: null
 
       }
     }
