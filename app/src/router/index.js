@@ -115,6 +115,11 @@ const router = createRouter({
       path: '/UserProfile/:id',
       name: 'UserProfile',
       component: () => import('@/views/users/UserProfile.vue')
+    },
+    {
+      path: '/novels/search',
+      name: 'Novels.search',
+      component: () => import('@/views/novels/SearchNovels.vue')
     }
   ]
 })

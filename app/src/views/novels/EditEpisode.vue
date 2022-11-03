@@ -13,8 +13,8 @@
       <textarea name="" id="" cols="100" rows="10" v-model="episode.detail"> </textarea>
     </div>
 
-    <div class="m-4">
-      <label for="novel_id"> novel_id </label>
+    <div class="m-4" hidden>
+      <label for="novel_id" > novel_id </label>
       <input type="number" v-model="episode.novel_id">
     </div>
 

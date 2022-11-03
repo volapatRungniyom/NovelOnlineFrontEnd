@@ -1,5 +1,6 @@
 <template>
 
+
   <div class="m-8">
     <h1 class="text-4xl"> Create Episode </h1>
 
@@ -13,7 +14,7 @@
       <textarea name="" id="" cols="100" rows="10" v-model="episode.detail"> </textarea>
     </div>
 
-    <div class="m-4">
+    <div class="m-4" hidden>
       <label for="novel_id"> novel_id </label>
       <input type="number" v-model="episode.novel_id">
     </div>

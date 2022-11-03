@@ -2,14 +2,14 @@
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from '@/components/HelloWorld.vue'
 import Profile from '@/components/profile/Profile.vue'
-
+import SearchBar from '@/components/novels/SearchBar.vue'
 </script>
 
 <template >
   <header class="bg-[#49EAEF] mb-5 h-24">
     <nav class="relative flex flex-wrap items-center justify-between ">
-      <div class="container px-4 mx-auto flex flex-wrap items-center justify-between">
-        <div class="w-full relative flex justify-between lg:w-auto  px-4 lg:static lg:block lg:justify-start">
+      <div class="container px-4 mx-auto flex flex-wrap items-center  ">
+        <div class="w-full relative flex justify-between lg:w-auto  px-4 lg:static lg:block lg:justify-start ">
           <a class="text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-white">
             <Profile></Profile>
           </a>
@@ -19,6 +19,8 @@ import Profile from '@/components/profile/Profile.vue'
             <span class="block relative w-6 h-px rounded-sm bg-white mt-1"></span>
           </button>
         </div>
+        <search-bar></search-bar>
+
         <div class="lg:flex flex-grow items-center" id="example-navbar-warning">
           <ul class="flex flex-col lg:flex-row list-none ml-auto text-2xl font-bold ">
             <li class="nav-item ">

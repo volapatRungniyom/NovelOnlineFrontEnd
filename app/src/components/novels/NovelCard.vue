@@ -1,9 +1,9 @@
 <template>
 
 
-  <div class="p-10" @click="ShowNovel(novel)">
-    <!--Card 1-->
-    <div class="object-contain h-auto w-auto max-w-sm rounded overflow-hidden shadow-lg cursor-pointer hover:scale-125 ease-in duration-300">
+  <div class="p-10" >
+    <div @click="ShowNovel(novel)"
+        class="object-contain h-auto w-auto max-w-sm rounded overflow-hidden shadow-lg cursor-pointer hover:scale-125 ease-in duration-300">
       <img class="object-fill h-96 w-96 " :src="`http://localhost/storage/image/${novel.image}`" >
       <div class="px-6 py-4">
         <div class="font-bold text-xl mb-2">{{ novel.name}}</div>
@@ -34,7 +34,7 @@ export default {
   },
   methods:{
     ShowNovel(novel){
-      this.$router.push(`novels/${novel.id}`)
+      this.$router.push(`/novels/${novel.id}`)
     }
   }
 }

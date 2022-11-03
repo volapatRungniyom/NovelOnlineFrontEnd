@@ -15,6 +15,8 @@
         >Register</RouterLink>
       </div>
 
+
+
 </template>
 <script>
 import { useAuthStore } from '@/stores/auth.js'
