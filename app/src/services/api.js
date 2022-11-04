@@ -104,6 +104,13 @@ export const commentEpisodelAPI = {
   },
 }
 
+export const EpisodelAPI = {
+  async getUser (episode_id,user) {
+    const response = await axiosInstance.put(`/novels/episodes/${episode_id}`,user)
+
+  },
+}
+
 export const novelAPI = {
   async getAll () {
     const response = await axiosInstance.get('/novels')

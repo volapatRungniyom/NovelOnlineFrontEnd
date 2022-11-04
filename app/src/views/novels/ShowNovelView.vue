@@ -90,7 +90,7 @@
 
           <div class="flex mt-6 items-center pb-5 border-b-2 border-gray-200 mb-5">
             <div class="flex">
-              <span class="mr-3">จำนวนตอน {{ novel.episodes.length }}</span>
+              <span class="mr-3">จำนวนตอน {{ episodeLength(novel.episodes) }}</span>
 
 
             </div>
@@ -168,9 +168,10 @@
             Episode
             <div v-for=" episode in novel.episodes" :key="episode.id">
               <div class="p-4 mb-d border-2 border-blue-800 rounded-lg m-4 cursor-pointer" @click="ShowEpisode(episode)">
-                <div class="text-3xl">
+                <div class="text-3xl" :id="episode.id">
                   {{ episode.name}}-----
                   {{ adddate(episode.created_at)}}
+                  {{ changeText(episode.id)}}
                 </div>
               </div>
               <div v-if="is_author">
@@ -248,14 +249,14 @@ export default {
       auth : {},
       check: false,
       loadss : 1,
-      id_novel: this.$route.params.id,
+      id_novel: 1,
       user : {
         user_id : 1
       },
       data : [],
       comment : {
         message : "",
-        novel_id : this.$route.params.id,
+        novel_id : 1,
         user_id : 1
       },
       is_author : false,
@@ -267,11 +268,14 @@ export default {
       },
       deleteConfirm : false,
       loadDeleteConfirm : false,
-      commentshow : {}
+      commentshow : {},
+      episodeUser: []
     }
   },
   async created() {
     const id = this.$route.params.id
+    this.id_novel = id
+    this.comment.novel_id = id
     try {
       const response = await this.$axios.get(`/novels/${id}`)
       this.tags = await tagAPI.getAll()
@@ -297,6 +301,9 @@ export default {
       this.auth = this.auth_store.getAuth
       this.comment.user_id = this.auth.id
 
+      for (var i in this.auth.episode){
+        this.episodeUser.push(this.auth.episode[i].episode_id)
+      }
 
       for (var x in this.auth.libary){
         if (this.$route.params.id.toString() === this.auth.libary[x].id.toString()){
@@ -404,6 +411,20 @@ export default {
     getTime(){
       const today = new Date().toISOString()
       return today
+    },
+    changeText(id){
+      if (this.auth){
+        if (this.episodeUser.includes(id)){
+          if (document.getElementById(id.toString())){
+            document.getElementById(id.toString()).style.color = 'gray';
+          }
+        }
+      }
+    },
+    episodeLength(episode){
+      if (episode !== undefined) {
+        return episode.length
+      }
     }
 
   },

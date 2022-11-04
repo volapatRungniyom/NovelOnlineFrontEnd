@@ -114,6 +114,8 @@
 import Comment from '@/components/novels/Comment.vue'
 import { useAuthStore } from '@/stores/auth.js'
 import { commentEpisodelAPI } from '@/services/api.js'
+import { EpisodelAPI } from '@/services/api.js'
+
 
 
 export default {
@@ -133,7 +135,10 @@ export default {
       },
       data: [],
       commentshow : {},
-      auth: {}
+      auth: {},
+      episodeUser: {
+        user_id : 1
+      }
     }
   },
   async created() {
@@ -152,6 +157,8 @@ export default {
       await this.auth_store.fetch()
       this.auth = this.auth_store.getAuth
       this.comments.user_id = this.auth.id
+      this.episodeUser.user_id = this.auth.id
+      await EpisodelAPI.getUser(id,this.episodeUser)
 
     }else {
       this.auth = null
@@ -176,6 +183,9 @@ export default {
         await this.auth_store.fetch()
         this.auth = this.auth_store.getAuth
         this.comments.user_id = this.auth.id
+        this.episodeUser.user_id = this.auth.id
+        await EpisodelAPI.getUser(id,this.episodeUser)
+
       }else {
         this.auth = null
       }
