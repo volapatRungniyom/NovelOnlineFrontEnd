@@ -114,34 +114,9 @@
     </div>
 
 
-    <div v-if="novel.comments" class="well" >
-      <h1>Comment</h1>
-      <div v-if="auth">
-      <div>
-        <div class="m-4">
-          <label for="detail"> message </label>
-          <textarea name="" id="" cols="100" rows="10" v-model="comment.message"> </textarea>
-        </div>
-        <button v-on:click="AddComment()" class="bg-gray-300 hover:bg-red-400 text-gray-800 font-bold py-2 px-4 rounded-r ml-2">
-          AddComment
-        </button>
-      </div>
-      </div>
-
-      <div v-for=" comment in data" >
-        <div class="p-4 mb-d border-2 border-green-800 rounded-lg m-4 ">
-          <div class="text-3xl">
-            {{ comment }}
-          </div>
-        </div>
-      </div>
-    </div>
-
 
   </div>
   <div v-if="deleteConfirm">
-
-
       <div class="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
         <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
 
@@ -181,15 +156,47 @@
           </div>
         </div>
       </div>
-
   </div>
+
+    <h1>Comment</h1>
+    <div v-if="auth" class="mb-10">
+      <div>
+        <div class="m-4">
+          <label for="detail"> message </label>
+          <textarea name="" id="" cols="100" rows="10" v-model="comment.message"> </textarea>
+        </div>
+        <button v-on:click="AddComment()" class="bg-gray-300 hover:bg-red-400 text-gray-800 font-bold py-2 px-4 rounded-r ml-2">
+          AddComment
+        </button>
+      </div>
+    </div>
+
+  <comment v-for="NewComment in data"
+           :image_path = "auth.image_path"
+           :name = "auth.name"
+           :created_at = "getTime()"
+           :message = "NewComment"
+  >
+  </comment>
+
+  <comment v-for="comment in commentshow"
+           :key="comment.id"
+           :image_path = "comment.user.image_path"
+           :name = "comment.user.name"
+           :created_at = "comment.created_at"
+           :message = "comment.message"
+  >
+  </comment>
+
 
 
 </template>
 
 <script >
 import { useAuthStore } from '@/stores/auth.js'
+import { commentNovelAPI } from '@/services/api.js'
 import { tagAPI } from '@/services/api.js'
+import Comment from '@/components/novels/Comment.vue'
 import DeleteConfirm from '@/components/novels/DeleteConfirm.vue'
 
 export default {
@@ -211,7 +218,8 @@ export default {
       data : [],
       comment : {
         message : "",
-        novel_id : this.$route.params.id
+        novel_id : this.$route.params.id,
+        user_id : 1
       },
       is_author : false,
       tags : {},
@@ -221,7 +229,8 @@ export default {
         novel_id : 1
       },
       deleteConfirm : false,
-      loadDeleteConfirm : false
+      loadDeleteConfirm : false,
+      commentshow : {}
     }
   },
   async created() {
@@ -229,15 +238,13 @@ export default {
     try {
       const response = await this.$axios.get(`/novels/${id}`)
       this.tags = await tagAPI.getAll()
+      this.commentshow = await commentNovelAPI.getComment(id)
       this.selected = this.tags[0]
 
       if (response.status === 200){
         this.novel = response.data.data
         this.novelTag.novel_id = this.novel.id
         this.loadss = 0
-        for (var i in this.novel.comments){
-          this.data.push(this.novel.comments[i].message)
-        }
 
         for (var a in this.novel.tags){
           this.tagshow.push(this.novel.tags[a].name)
@@ -251,6 +258,7 @@ export default {
     if (this.auth_store.isAuthen) {
       await this.auth_store.fetch()
       this.auth = this.auth_store.getAuth
+      this.comment.user_id = this.auth.id
 
 
       for (var x in this.auth.libary){
@@ -280,6 +288,7 @@ export default {
         const response = await this.$axios.put(`/novels/${this.$route.params.id}`,this.user)
         if (response.status === 200){
           await this.auth_store.fetch()
+          this.comment.user_id = this.auth.id
           if (document.getElementById("myLibrary").innerText.toString() === "novel in my library"){
             document.getElementById("myLibrary").innerText = "add to library";
           }
@@ -299,14 +308,20 @@ export default {
       this.$router.push(`/editEpisode/${id}`)
     },
     async AddComment(){
-      try {
-        const response = await this.$axios.post(`/commentNovels`,this.comment)
-        if (response.status === 201){
-          this.data.push(this.comment.message)
+      if (this.auth_store.isAuthen){
+        try {
+          const response = await this.$axios.post(`/commentNovels`,this.comment)
+          if (response.status === 201){
+            this.data.unshift(this.comment.message)
+          }
+        }catch (error){
+          this.error = error.message
+          console.log(error)
         }
-      }catch (error){
-        this.error = error.message
-        console.log(error)
+      }
+      else {
+        this.$router.push("/login")
+        alert("please Login")
       }
     },
     ShowUser(user){
@@ -348,11 +363,16 @@ export default {
     },
     closePopup() {
       this.deleteConfirm = false
+    },
+    getTime(){
+      const today = new Date().toISOString()
+      return today
     }
 
   },
   components: {
-    DeleteConfirm
+    DeleteConfirm,
+    Comment
   }
 }
 </script>

@@ -90,6 +90,20 @@ export const tagAPI = {
   }
 }
 
+export const commentNovelAPI = {
+  async getComment (novel_id) {
+    const response = await axiosInstance.get(`/commentNovels/get/${novel_id}`)
+    return response.data.data
+  },
+}
+
+export const commentEpisodelAPI = {
+  async getComment (episode_id) {
+    const response = await axiosInstance.get(`/commentEpisodes/get/${episode_id}`)
+    return response.data.data
+  },
+}
+
 export const novelAPI = {
   async getAll () {
     const response = await axiosInstance.get('/novels')

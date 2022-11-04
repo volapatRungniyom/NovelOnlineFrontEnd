@@ -27,7 +27,7 @@
     </div>
   </div>
 
-  <div v-if="messsage == null">
+  <div v-if="episode.detail">
     <div class="text-4xl">
       {{episode.name}}
     </div>
@@ -63,31 +63,51 @@
       </RouterLink>
   </div>
 
-  <div v-if="episode.comment" class="well" >
-    <h1>Comment</h1>
-    <div>
-      <div class="m-4">
-        <label for="detail"> message </label>
-        <textarea name="" id="" cols="100" rows="10" v-model="comments.message"> </textarea>
-      </div>
-      <button v-on:click="AddComment()" class="bg-gray-300 hover:bg-red-400 text-gray-800 font-bold py-2 px-4 rounded-r ml-2">
-        AddComment
-      </button>
+  <h1>Comment</h1>
+  <div v-if="auth" class="mb-10">
+    <div class="m-4">
+      <label for="detail"> message </label>
+      <textarea name="" id="" cols="100" rows="10" v-model="comments.message"> </textarea>
     </div>
-    <div v-for=" comment in data" >
-      <div class="p-4 mb-d border-2 border-green-800 rounded-lg m-4 ">
-        <div class="text-3xl">
-          {{ comment }}
-        </div>
-      </div>
-    </div>
+    <button v-on:click="AddComment()" class="bg-gray-300 hover:bg-red-400 text-gray-800 font-bold py-2 px-4 rounded-r ml-2">
+      AddComment
+    </button>
+
+    <comment v-for="NewComment in data"
+             :image_path = "auth.image_path"
+             :name = "auth.name"
+             :created_at = "getTime()"
+             :message = "NewComment"
+    >
+    </comment>
+
+  </div>
+  <div v-else>
+    <p class="text-2xl"> please login to comment</p>
   </div>
 
+  <comment v-for="comment in commentshow"
+           :key="comment.id"
+           :image_path = "comment.user.image_path"
+           :name = "comment.user.name"
+           :created_at = "comment.created_at"
+           :message = "comment.message"
+  >
+  </comment>
 
 </template>
 
 <script>
+import Comment from '@/components/novels/Comment.vue'
+import { useAuthStore } from '@/stores/auth.js'
+import { commentEpisodelAPI } from '@/services/api.js'
+
+
 export default {
+  setup() {
+    const auth_store = useAuthStore()
+    return { auth_store }
+  },
   data () {
     return {
       error : null,
@@ -95,9 +115,12 @@ export default {
       messsage : null,
       comments : {
         messsage : '',
-        episode_id : this.$route.params.id
+        episode_id : this.$route.params.id,
+        user_id : 1
       },
-      data: []
+      data: [],
+      commentshow : {},
+      auth: {}
     }
   },
   async created() {
@@ -106,51 +129,70 @@ export default {
       const response = await this.$axios.get(`/novels/episodes/${id}`)
       if (response.status === 200){
         this.episode = response.data.data
-        for (var i in this.episode.comment){
-          this.data.push(this.episode.comment[i].message)
-        }
-
+        this.commentshow = await commentEpisodelAPI.getComment(id)
       }
     }catch (error){
       console.log(error)
       this.error = error.message
     }
+    if (this.auth_store.isAuthen) {
+      await this.auth_store.fetch()
+      this.auth = this.auth_store.getAuth
+      this.comments.user_id = this.auth.id
+
+    }else {
+      this.auth = null
+    }
   },
   watch : {
     async '$route' (to, from) {
       const id = this.$route.params.id
+      this.data = []
+      this.commentshow = {}
       try {
         const response = await this.$axios.get(`/novels/episodes/${id}`)
         if (response.status === 200){
           this.episode = response.data.data
-          this.messsage = null
-          this.data = []
-          for (var i in this.episode.comment){
-            this.data.push(this.episode.comment[i].message)
-          }
-
+          this.commentshow = await commentEpisodelAPI.getComment(id)
         }
       }catch (error){
         console.log(error)
         this.error = error.message
       }
+      if (this.auth_store.isAuthen) {
+        await this.auth_store.fetch()
+        this.auth = this.auth_store.getAuth
+        this.comments.user_id = this.auth.id
+      }else {
+        this.auth = null
+      }
     }
+
   },methods : {
     check(){
       this.messsage = 1
     },
     async AddComment(){
+      this.comments.episode_id = this.$route.params.id
+      alert(this.$route.params.id)
       try {
         const response = await this.$axios.post(`/commentEpisodes`,this.comments)
         if (response.status === 201){
-          this.data.push(this.comments.message)
+          this.data.unshift(this.comments.message)
           this.comments.message = ""
         }
       }catch (error){
         this.error = error.message
         console.log(error)
       }
-   }
+   },
+    getTime(){
+      const today = new Date().toISOString()
+      return today
+    }
+  },
+  components :{
+    Comment
   }
 }
 </script>
