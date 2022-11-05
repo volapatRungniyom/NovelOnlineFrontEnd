@@ -87,7 +87,15 @@ export const tagAPI = {
     return {
       success: false
     }
+  },
+  async getTag (tag_id) {
+    const response = await axiosInstance.get(`/tags/${tag_id}`)
+    if (response.status == 200) {
+      return response.data.data
+    }
+    return []
   }
+
 }
 
 export const commentNovelAPI = {
@@ -127,5 +135,19 @@ export const novelAPI = {
     return {
       success: false
     }
+  },
+  async getMostView(){
+    const response = await axiosInstance.get('/novels/view')
+    if (response.status == 200) {
+      return response.data.data
+    }
+    return []
+  },
+  async getNewNovel(){
+    const response = await axiosInstance.get('/novels/new')
+    if (response.status == 200) {
+      return response.data.data
+    }
+    return []
   }
 }

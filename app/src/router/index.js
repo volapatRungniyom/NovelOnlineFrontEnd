@@ -120,7 +120,17 @@ const router = createRouter({
       path: '/novels/search',
       name: 'Novels.search',
       component: () => import('@/views/novels/SearchNovels.vue')
-    }
+    },
+    {
+      path: '/tags',
+      name: 'tags.index',
+      component: () => import('@/views/novels/ShowTag.vue')
+    },
+    {
+      path: '/tags/:id',
+      name: 'tags.show',
+      component: () => import('@/views/novels/TagShow.vue')
+    },
   ]
 })
 

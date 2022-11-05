@@ -22,7 +22,7 @@ import SearchBar from '@/components/novels/SearchBar.vue'
         <search-bar></search-bar>
 
         <div class="lg:flex flex-grow items-center" id="example-navbar-warning">
-          <ul class="flex flex-col lg:flex-row list-none ml-auto text-2xl font-bold ">
+          <ul class="flex flex-col lg:flex-row list-none ml-auto text-xl font-bold ">
             <li class="nav-item ">
               <RouterLink class="hover:drop-shadow-lg " to="/">Home</RouterLink>
             </li>
@@ -37,6 +37,9 @@ import SearchBar from '@/components/novels/SearchBar.vue'
             </li>
             <li class="nav-item">
               <RouterLink class="hover:drop-shadow-lg " to="/MyNovels">My Novels</RouterLink>
+            </li>
+            <li class="nav-item">
+              <RouterLink class="hover:drop-shadow-lg " to="/tags">Tag</RouterLink>
             </li>
           </ul>
         </div>

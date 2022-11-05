@@ -7,9 +7,12 @@
     </svg>
     <span class="sr-only">Loading...</span>
   </div>
+  <div v-else>
+    <h1 class="text-4xl text-center"> Most view </h1>
+  </div>
 
   <div class="md:flex md:justify-center ">
-    <div class="grid grid-cols-3 gap-4 w-11/12 ">
+    <div class="grid grid-cols-4 gap-4 w-11/12">
       <NovelCard v-for="novel in novels"
                  :key = "novel.id"
                  :novel = "novel"
@@ -22,6 +25,7 @@
 
 <script>
 import NovelCard from '@/components/novels/NovelCard.vue'
+import { novelAPI } from '@/services/api.js'
 
 export default {
   data() {
@@ -31,22 +35,12 @@ export default {
       novels: null
     }
   },
-  async mounted() {
+  async created() {
     try {
-      const response = await this.$axios.get('/novels')
-      if (response.status === 200){
-        this.novels = response.data.data
-      } else {
-        console.error(response.status)
-      }
+      this.novels = await novelAPI.getMostView()
     }catch (error){
       console.error(error.message)
       this.selected = error.message
-    }
-  },
-  methods:{
-    ShowNovel(novel){
-      this.$router.push(`novels/${novel.id}`)
     }
   },
   components: {
