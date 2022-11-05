@@ -7,7 +7,7 @@
     </svg>
     <span class="sr-only">Loading...</span>
   </div>
-  <div class="inline-flex bg-blue-300" @click="check">
+  <div class="inline-flex bg-blu-300 mt-10" @click="check">
     <RouterLink :to="{name: 'episodes.show', params: { id: episode.prev }} "
                 class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r ml-2" v-if="episode.prev != null">
       Prev
@@ -25,9 +25,9 @@
   </div>
 
 
-  <section class="text-gray-700 body-font overflow-hidden bg-gray-500">
+  <section class="text-gray-700 body-font overflow-hidden bg-gra-500">
     <div class="container px-5 py-24 mx-auto bg-gra-400">
-      <div class="lg:w-4/5 mx-auto flex flex-wrap bg-white">
+      <div class="mx-auto flex flex-wrap bg-white">
         <div class="">
           <!-- <div class="w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0"> -->
 
@@ -41,7 +41,8 @@
             </div>
 
             <div class="font-sans whitespace-pre-wrap">
-              <p class="text-xl">{{episode.detail}}</p>
+              <p @click.right.prevent @keydown="keydown" @copy.prevent @paste.prevent 
+              class="text-xl">{{episode.detail}}</p>
 
             </div>
           </div>
@@ -77,7 +78,83 @@
     </RouterLink>
   </div>
 
-  <h1>Comment</h1>
+
+
+
+  <section class="text-gray-700 body-font overflow-hidden bg-white">
+  <div class="container px-5 -py-24 mx-auto">
+    <div class="lg:w-4/5 mx-auto flex flex-wrap">
+
+      <div class="w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
+
+        <div class="well"></div>
+
+        <div class="flex mt-6 items-center pb-5 border-b-2 border-gray-200 mb-5">
+            <div class="flex ml-6 items-center">
+              <span class="mr-3 mt-20">ความคิดเห็น</span>
+            </div>
+        </div>
+
+        <div class="">
+          <div v-if="auth" class="mb-10">
+          
+            <div class="m-4">
+              <label for="detail">  </label>
+              <textarea class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              name="" id="" cols="100" rows="10" v-model="comments.message"
+              placeholder="ข้อความของคุณ" > </textarea>
+            </div>
+            <button v-on:click="AddComment()" class="w-full items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
+              AddComment
+            </button>
+
+            <!--  -->
+          </div>
+
+          <div v-else>
+            <p class="text-2xl"> please login to comment</p>
+          </div>
+        </div>
+
+        <div class="">
+
+
+          <comment v-for="NewComment in data"
+             :image_path = "auth.image_path"
+             :name = "auth.name"
+             :created_at = "getTime()"
+             :message = "NewComment"
+          >
+          </comment>
+
+
+          <comment v-for="comment in commentshow"
+           :key="comment.id"
+           :image_path = "comment.user.image_path"
+           :name = "comment.user.name"
+           :created_at = "comment.created_at"
+           :message = "comment.message"
+          >
+          </comment>
+        </div>
+
+
+      </div>
+
+
+    
+
+    </div>
+    
+
+  </div>
+</section>
+
+
+
+
+
+  <!-- <h1>Comment</h1>
   <div v-if="auth" class="mb-10">
     <div class="m-4">
       <label for="detail"> message </label>
@@ -106,7 +183,7 @@
            :created_at = "comment.created_at"
            :message = "comment.message"
   >
-  </comment>
+  </comment> -->
 
 </template>
 
@@ -194,6 +271,9 @@ export default {
   },methods : {
     check(){
       this.messsage = 1
+    },
+    keydown: function(e) {
+      console.log(e)
     },
     async AddComment(){
       this.comments.episode_id = this.$route.params.id

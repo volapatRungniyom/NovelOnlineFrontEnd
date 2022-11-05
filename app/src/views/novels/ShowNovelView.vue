@@ -92,16 +92,20 @@
             <div class="flex">
               <span class="mr-3">จำนวนตอน {{ episodeLength(novel.episodes) }}</span>
             </div>
+            
             <div class="flex ml-6 items-center">
-              <span class="mr-3">ความคิดเห็น</span>
+              <span class="mr-3">ความคิดเห็น {{commentshow.length + data.length}} </span>
             </div>
-            {{commentshow.length + data.length}}
-            <svg
+            <div class="flex ml-6">
+              <svg
                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 inline-block mr-2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
               <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-            :{{novel.view}}
+              </svg>
+              <span>{{novel.view}}</span>
+              
+            </div>
+
           </div>
           <!-- ปุ่มอ่าน -->
           <div class="flex">
@@ -133,7 +137,7 @@
           <div v-if="auth" class="mt-7">
             <div v-if="is_author">
               <button @click="CreateEpisode()"
-                      class="w-96 mb-2 text-white py-2 px-4 uppercase rounded bg-blue-400 hover:bg-blue-500 shadow hover:shadow-lg font-medium transition transform hover:-translate-y-0.5"
+                      class="w-96 mb-2 text-white py-2 px-4 uppercase rounded bg-lime-700 hover:bg-lime-800 shadow hover:shadow-lg font-medium transition transform hover:-translate-y-0.5"
               >
                 Create Episode
               </button>
@@ -144,7 +148,7 @@
               </button>
 
               <button @click="deleteNovel()"
-                      class="text-white py-2 px-4 uppercase rounded bg-red-400 hover:bg-red-500 shadow hover:shadow-lg font-medium transition transform hover:-translate-y-0.5"
+                      class="w-96 mb-2 text-white py-2 px-4 uppercase rounded bg-red-400 hover:bg-red-500 shadow hover:shadow-lg font-medium transition transform hover:-translate-y-0.5"
               >
                 delete Novel
               </button>
@@ -155,7 +159,7 @@
                 add Tag or delete
               </button>
 
-              <select class="w-96 mb-2 form-control" v-model="selected" >
+              <select class="w-96 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" v-model="selected" >
                 <option v-for="tag in tags" v-bind:value="tag" >{{ tag.name }}</option>
               </select>
 
@@ -170,36 +174,102 @@
 
           <div v-if="novel.episodes" class="well" >
             Episode
-            <div v-for=" episode in novel.episodes" :key="episode.id">
-              <div class="p-4 mb-d border-2 border-blue-800 rounded-lg m-4 cursor-pointer" @click="ShowEpisode(episode)">
-                <div class="text-3xl" :id="episode.id">
-                  {{ episode.name}}-----
-                  {{ adddate(episode.created_at)}}
-                  {{ changeText(episode.id)}}
+            
+            <div v-for=" episode in novel.episodes" :key="episode.id" class="">
+              <!-- <div class="p-4 mb-d border-2 border-blue-800 rounded-lg m-4 cursor-pointer" @click="ShowEpisode(episode)"> -->
+              
+
+                <div v-if="is_author" class="float-right">
+                  <button @click="EditEpisode(episode.id)"
+                          class="bg-gray-300 hover:bg-red-400 text-gray-800 font-bold py-2 px-4 rounded-r ml-2" >
+                    Edit
+                  </button>
                 </div>
+
+
+              <div class="flex pb-5 border-b-2 border-gray-200 mb-5 cursor-pointer" @click="ShowEpisode(episode)" >
+                <div class="flex text-lg font-bold"  :id="episode.id" >
+                  {{ episode.name}}
+                  <!-- {{ adddate(episode.created_at)}}
+                  {{ changeText(episode.id)}} -->
+                </div>
+
+                <!-- <button class="flex ml-auto px-6 focus:outline-none hover:bg-red-600 rounded">Button</button> -->
+                <div class="flex ml-auto px-6 text-lg font-bold text-gray-500">
+                  <span class="mr-3">{{ adddate(episode.created_at)}}</span>
+                  <span class="mr-3">{{ changeText(episode.id)}}</span>
+                  
+                  
                   <svg
                       xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 inline-block">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
-                  {{episode.view}}
+                  <span class="ml-3">{{episode.view}}</span>
+            
+                  
+                </div>
+
               </div>
-              <div v-if="is_author">
-                <button @click="EditEpisode(episode.id)"
-                        class="bg-gray-300 hover:bg-red-400 text-gray-800 font-bold py-2 px-4 rounded-r ml-2" >
-                  Edit
-                </button>
-              </div>
+
+
             </div>
+            
           </div>
+
+          
+
+
+
 
 
           <div class="flex mt-6 items-center pb-5 border-b-2 border-gray-200 mb-5">
             <div class="flex ml-6 items-center">
               <span class="mr-3 mt-20">ความคิดเห็น</span>
-
             </div>
           </div>
+          
+          <div class="">
+            <!--  -->
+            <div v-if="auth" class="mb-10">
+              <div>
+                <div class="mb-4 item-center">
+                  <label for="detail"> . </label>
+                  <textarea name="" id="" cols="100" rows="10" v-model="comment.message"
+                  class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="ข้อความของคุณ" > </textarea>
+                </div>
+                <button v-on:click="AddComment()" class="w-full items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
+                  เขียนรีวิว
+                </button>
+              </div>
+
+            </div>
+            
+ 
+
+            <!--  -->
+          </div>
+
+
+          <div class="">
+            <comment v-for="NewComment in data"
+                        :image_path = "auth.image_path"
+                        :name = "auth.name"
+                        :created_at = "getTime()"
+                        :message = "NewComment"
+              >
+              </comment>
+            <comment v-for="comment in commentshow"
+                      :key="comment.id"
+                      :image_path = "comment.user.image_path"
+                      :name = "comment.user.name"
+                      :created_at = "comment.created_at"
+                      :message = "comment.message">
+              </comment>
+          </div>
+
+   
 
         </div>
 
@@ -207,7 +277,25 @@
       </div>
     </div>
 
-    <h1>Comment</h1>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- <h1>Comment</h1>
     <div v-if="auth" class="mb-10">
       <div>
         <div class="m-4">
@@ -225,16 +313,16 @@
                :message = "NewComment"
       >
       </comment>
-    </div>
+    </div> -->
 
-    <comment v-for="comment in commentshow"
+    <!-- <comment v-for="comment in commentshow"
              :key="comment.id"
              :image_path = "comment.user.image_path"
              :name = "comment.user.name"
              :created_at = "comment.created_at"
              :message = "comment.message"
     >
-    </comment>
+    </comment> -->
 
   </section>
 
@@ -426,7 +514,7 @@ export default {
       if (this.auth){
         if (this.episodeUser.includes(id)){
           if (document.getElementById(id.toString())){
-            document.getElementById(id.toString()).style.color = 'blue';
+            document.getElementById(id.toString()).style.color = 'gray';
           }
         }
       }

@@ -1,6 +1,6 @@
 <template>
       <div v-if="auth && auth.email" class="font-bold">
-        <img class="w-20 h-20 mb-10 -ml-10 mr-8 mt-6  inline-block  rounded-full dark:bg-gray-500 aspect-square" :src="`http://localhost/storage/image/${auth.image_path}`" />
+        <img class="w-20 h-20 mb-10 -ml-20 mr-8 mt-6  inline-block  rounded-full dark:bg-gray-500 aspect-square" :src="`http://localhost/storage/image/${auth.image_path}`" />
         <router-link to="/MyProfile" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
           {{ auth.name }}
@@ -10,7 +10,7 @@
       </div>
       <div v-else>
         <router-link to="/login" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-        >Please Login</router-link>or
+        >Login</router-link>or
         <RouterLink to="/register" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >Register</RouterLink>
       </div>
