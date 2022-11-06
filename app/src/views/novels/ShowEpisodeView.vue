@@ -118,7 +118,6 @@
 
         <div class="">
 
-
           <comment v-for="NewComment in data"
              :image_path = "auth.image_path"
              :name = "auth.name"
@@ -126,7 +125,6 @@
              :message = "NewComment"
           >
           </comment>
-
 
           <comment v-for="comment in commentshow"
            :key="comment.id"
@@ -150,41 +148,6 @@
   </div>
 </section>
 
-
-
-
-
-  <!-- <h1>Comment</h1>
-  <div v-if="auth" class="mb-10">
-    <div class="m-4">
-      <label for="detail"> message </label>
-      <textarea name="" id="" cols="100" rows="10" v-model="comments.message"> </textarea>
-    </div>
-    <button v-on:click="AddComment()" class="bg-gray-300 hover:bg-red-400 text-gray-800 font-bold py-2 px-4 rounded-r ml-2">
-      AddComment
-    </button>
-
-    <comment v-for="NewComment in data"
-             :image_path = "auth.image_path"
-             :name = "auth.name"
-             :created_at = "getTime()"
-             :message = "NewComment"
-    >
-    </comment>
-  </div>
-
-  <div v-else>
-    <p class="text-2xl"> please login to comment</p>
-  </div>
-  <comment v-for="comment in commentshow"
-           :key="comment.id"
-           :image_path = "comment.user.image_path"
-           :name = "comment.user.name"
-           :created_at = "comment.created_at"
-           :message = "comment.message"
-  >
-  </comment> -->
-
 </template>
 
 <script>
@@ -192,8 +155,6 @@ import Comment from '@/components/novels/Comment.vue'
 import { useAuthStore } from '@/stores/auth.js'
 import { commentEpisodelAPI } from '@/services/api.js'
 import { EpisodelAPI } from '@/services/api.js'
-
-
 
 export default {
   setup() {

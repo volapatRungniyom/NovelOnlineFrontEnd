@@ -7,6 +7,25 @@
     </svg>
     <span class="sr-only">Loading...</span>
   </div>
+
+  <div v-if="auth.role === 'admin'">
+    <form @submit.prevent="createTag(tag)">
+      <div class=" ml-10 mt-10 w-96 inline-block">
+        <input
+            type="text" v-model="tag.name" maxlength="10" minlength="5"  required autocomplete="off"
+            class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+            placeholder="Name"
+        />
+      </div>
+      <button type="submit"
+              class="inline-block w-auto px-7 py-3 bg-blue-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-full"
+      >
+        create Tag
+      </button>
+    </form>
+  </div>
+
+
   <div class="md:flex md:justify-center ">
     <div class="grid grid-cols-6 gap-4 mt-10 ">
          <div v-for=" tag in tags" :key = "tag.id" class="inline-block bg-gray-200 rounded-full
@@ -22,25 +41,57 @@
 
 <script>
 import { tagAPI } from '@/services/api.js'
+import { useAuthStore } from '@/stores/auth.js'
 
 export default {
+  setup() {
+    const auth_store = useAuthStore()
+    return { auth_store }
+
+  },
   data() {
     return {
       selected:null,
-      tags: null
+      tags: null,
+      tag: {
+        name : ''
+      },
+      auth : {},
+      data : []
     }
   },
   async created() {
     try {
       this.tags = await tagAPI.getAll()
+      for (let x in this.tags){
+        this.data.push(this.tags[x].name)
+      }
+
     }catch (error){
       console.error(error.message)
       this.selected = error.message
+    }
+    if (this.auth_store.isAuthen) {
+      await this.auth_store.fetch()
+      this.auth = this.auth_store.getAuth
+    } else {
+      this.auth = null
     }
   },
   methods : {
     TagShow(tag){
       this.$router.push(`/tags/${tag}`)
+    },
+    async createTag(tag){
+      tag.name = tag.name.trim()
+      if (this.data.includes(tag.name)){
+        alert('tag has been used')
+      }
+      else {
+        const response = await tagAPI.saveNew(tag)
+        alert('add tag sucess')
+        this.$router.push('/tags')
+      }
     }
   }
 }

@@ -58,8 +58,11 @@
   <section class="text-gray-700 body-font overflow-hidden bg-re-500">
     <div class="container px-5 py-24 mx-auto bg-gree-400">
       <div class="lg:w-4/5 mx-auto flex flex-wrap bg-yello-500">
-        <div>
+        <div v-if="novel.image">
           <img alt="ecommerce" class="h-96 w-96 object-cover object-center rounded border border-gray-200" :src="`http://localhost/storage/image/${novel.image}`">
+        </div>
+        <div v-else>
+          <img alt="ecommerce" class="h-96 w-96 object-cover object-center rounded border border-gray-200" src="https://media.istockphoto.com/id/1357365823/vector/default-image-icon-vector-missing-picture-page-for-website-design-or-mobile-app-no-photo.jpg?s=612x612&w=0&k=20&c=PM_optEhHBTZkuJQLlCjLz-v3zzxp-1mpNQZsdjrbns=">
         </div>
         <div class="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
 
@@ -71,10 +74,16 @@
           <!-- ผู้แต่ง -->
           <div v-for=" user in novel.user" :key = "user.id" class="mt-5">
             <div v-if="user.pivot.is_owner === 1">
-              <div @click="ShowUser(user)" class="cursor-pointer" >
-                <img class="w-10 h-10 inline-block mr-2 rounded-full dark:bg-gray-500 aspect-square"
-                     :src="`http://localhost/storage/image/${user.image_path}`" />
-                <h1 class="leading-relaxed inline-block text-black font-bold">
+              <div  class="cursor-pointer" >
+                <div v-if="user.image_path" class="inline-block">
+                  <img class="w-10 h-10 inline-block mr-2 rounded-full dark:bg-gray-500 aspect-square"
+                       :src="`http://localhost/storage/image/${user.image_path}`" />
+                </div>
+                <div class="inline-block" v-else>
+                  <img class="w-10 h-10 inline-block mr-2 rounded-full dark:bg-gray-500 aspect-square"
+                       src="https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/default-avatar.png" />
+                </div>
+                <h1 @click="ShowUser(user)" class="leading-relaxed inline-block text-black font-bold">
                   {{user.name }}
                 </h1>
               </div>
@@ -169,23 +178,18 @@
           <!--  -->
 
         </div>
-        <div class="">เทส</div>
         <div class=" w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
 
           <div v-if="novel.episodes" class="well" >
             Episode
-            
             <div v-for=" episode in novel.episodes" :key="episode.id" class="">
               <!-- <div class="p-4 mb-d border-2 border-blue-800 rounded-lg m-4 cursor-pointer" @click="ShowEpisode(episode)"> -->
-              
-
                 <div v-if="is_author" class="float-right">
                   <button @click="EditEpisode(episode.id)"
                           class="bg-gray-300 hover:bg-red-400 text-gray-800 font-bold py-2 px-4 rounded-r ml-2" >
                     Edit
                   </button>
                 </div>
-
 
               <div class="flex pb-5 border-b-2 border-gray-200 mb-5 cursor-pointer" @click="ShowEpisode(episode)" >
                 <div class="flex text-lg font-bold"  :id="episode.id" >

@@ -1,10 +1,10 @@
 <template>
 
-
   <div class="p-10">
     <div @click="ShowNovel(novel)"
         class="object-contain h-auto w-auto max-w-sm rounded overflow-hidden shadow-lg cursor-pointer ">
-      <img class="object-fill h-96 w-96 hover:scale-125 ease-in duration-300" :src="`http://localhost/storage/image/${novel.image}`" >
+      <img v-if="novel.image" class="object-fill h-96 w-96 hover:scale-125 ease-in duration-300" :src="`http://localhost/storage/image/${novel.image}`" >
+      <img v-else class="object-fill h-96 w-96 hover:scale-125 ease-in duration-300" src="https://media.istockphoto.com/id/1357365823/vector/default-image-icon-vector-missing-picture-page-for-website-design-or-mobile-app-no-photo.jpg?s=612x612&w=0&k=20&c=PM_optEhHBTZkuJQLlCjLz-v3zzxp-1mpNQZsdjrbns=" >
       <div class="px-6 py-4">
         <div class="font-bold text-xl mb-2">{{ novel.name}}</div>
           <p class="text-gray-700 text-base truncate w-50">
