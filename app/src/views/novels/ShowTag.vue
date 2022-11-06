@@ -7,12 +7,13 @@
     </svg>
     <span class="sr-only">Loading...</span>
   </div>
-
+  
+  <div v-if="auth">
   <div v-if="auth.role === 'admin'">
     <form @submit.prevent="createTag(tag)">
       <div class=" ml-10 mt-10 w-96 inline-block">
         <input
-            type="text" v-model="tag.name" maxlength="10" minlength="5"  required autocomplete="off"
+            type="text" v-model="tag.name" maxlength="10" minlength="4"  required autocomplete="off"
             class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
             placeholder="Name"
         />
@@ -24,7 +25,7 @@
       </button>
     </form>
   </div>
-
+  </div> 
 
   <div class="md:flex md:justify-center ">
     <div class="grid grid-cols-6 gap-4 mt-10 ">

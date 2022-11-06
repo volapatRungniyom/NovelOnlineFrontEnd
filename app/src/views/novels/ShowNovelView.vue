@@ -118,7 +118,7 @@
           </div>
           <!-- ปุ่มอ่าน -->
           <div class="flex">
-            <button class="flex text-white bg-yellow-400 border-0 py-2 px-6 focus:outline-none hover:bg-yellow-500 rounded">อ่าน</button>
+            <!-- <button @click="ShowEpisode(read)" class="flex text-white bg-yellow-400 border-0 py-2 px-6 focus:outline-none hover:bg-yellow-500 rounded">อ่าน</button> -->
 
             <div v-if="auth">
               <div v-if="check" >
@@ -135,11 +135,11 @@
             <!-- <button class="flex ml-6 text-white bg-yellow-400 border-0 py-2 px-6 focus:outline-none hover:bg-yellow-500 rounded">เพิ่มในคลัง</button> -->
 
             <!-- <button class="flex ml-auto text-white bg-red-500 border-0 py-2 px-6 focus:outline-none hover:bg-red-600 rounded">Button</button> -->
-            <button class="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
+            <!-- <button class="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
               <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
                 <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
               </svg>
-            </button>
+            </button> -->
           </div>
 
           <!-- create edit -->
@@ -281,52 +281,6 @@
       </div>
     </div>
 
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <!-- <h1>Comment</h1>
-    <div v-if="auth" class="mb-10">
-      <div>
-        <div class="m-4">
-          <label for="detail"> message </label>
-          <textarea name="" id="" cols="100" rows="10" v-model="comment.message"> </textarea>
-        </div>
-        <button v-on:click="AddComment()" class="bg-gray-300 hover:bg-red-400 text-gray-800 font-bold py-2 px-4 rounded-r ml-2">
-          AddComment
-        </button>
-      </div>
-      <comment v-for="NewComment in data"
-               :image_path = "auth.image_path"
-               :name = "auth.name"
-               :created_at = "getTime()"
-               :message = "NewComment"
-      >
-      </comment>
-    </div> -->
-
-    <!-- <comment v-for="comment in commentshow"
-             :key="comment.id"
-             :image_path = "comment.user.image_path"
-             :name = "comment.user.name"
-             :created_at = "comment.created_at"
-             :message = "comment.message"
-    >
-    </comment> -->
 
   </section>
 

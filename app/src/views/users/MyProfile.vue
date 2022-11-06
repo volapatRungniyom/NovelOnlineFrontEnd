@@ -13,16 +13,17 @@
 
         <div class="space-x-8 flex justify-between ">
           <div v-if="change">
-
+          <form @submit.prevent="editProfile()">
           <div class="m-4">
             <label for="name">name </label>
-            <input type="text" v-model="user.name">
+            <input type="text" required maxlength="10" minlength="5" v-model="user.name">
           </div>
 
-          <div class="m-4">
+          
+          <!-- <div class="m-4">
             <label for="name">email </label>
             <input type="text" v-model="user.email">
-          </div>
+          </div> -->
 
             <div class="col-md-6 m-3">
               <div class="custom-file">
@@ -34,7 +35,7 @@
 
             <button
                 class="text-white py-2 px-4 uppercase rounded bg-blue-400 hover:bg-blue-500 shadow hover:shadow-lg font-medium transition transform hover:-translate-y-0.5"
-                @click="editProfile()"
+                
             >
               change avatar
             </button>
@@ -45,6 +46,7 @@
             >
               cancel
             </button>
+          </form>
 
         </div>
           <div v-if="!change">

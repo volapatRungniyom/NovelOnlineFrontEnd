@@ -1,5 +1,5 @@
 <template>
-  <h1 class="text-8xl"> search</h1>
+  <!-- <h1 class="text-8xl"> search</h1> -->
 
   <div v-if="novels == null" role="status">
     <svg class="block w-32 h-32 mx-auto text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">

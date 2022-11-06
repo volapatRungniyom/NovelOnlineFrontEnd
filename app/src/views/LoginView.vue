@@ -5,9 +5,9 @@
       <div class="flex justify-center items-center flex-wrap h-full g-6 text-gray-800">
         <div class="md:w-8/12 lg:w-6/12 mb-12 md:mb-0">
           <img
-            src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg"
-            class="w-full"
-            alt="Phone image"
+            src="https://80000hours.org/wp-content/uploads/2022/06/open-book-256x256-1.png"
+            class="ml-auto w-96 h-96"
+            alt=""
           />
         </div>
   
@@ -34,7 +34,7 @@
               />
             </div>
   
-            <div class="flex justify-between items-center mb-6">
+            <!-- <div class="flex justify-between items-center mb-6">
               <div class="form-group form-check">
                 <input
                   type="checkbox"
@@ -46,12 +46,8 @@
                   >Remember me</label
                 >
               </div>
-              <!-- <a
-                href="#!"
-                class="text-blue-600 hover:text-blue-700 focus:text-blue-700 active:text-blue-800 duration-200 transition ease-in-out"
-                >Forgot password?</a
-              > -->
-            </div>
+
+            </div> -->
   
             <!-- Submit button -->
             <button

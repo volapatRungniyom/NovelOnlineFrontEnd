@@ -26,13 +26,20 @@
 <script>
 import NovelCard from '@/components/novels/NovelCard.vue'
 import { novelAPI } from '@/services/api.js'
+import { useAuthStore } from '@/stores/auth.js'
 
 export default {
+  setup() {
+    const auth_store = useAuthStore()
+    return { auth_store }
+  },
   data() {
     return {
       title : "All Novels",
       selected:null,
-      novels: null
+      novels: null,
+      auth : {}
+      
     }
   },
   async created() {
@@ -41,6 +48,14 @@ export default {
     }catch (error){
       console.error(error.message)
       this.selected = error.message
+    }
+
+    if (this.auth_store.isAuthen) {
+      await this.auth_store.fetch()
+      this.auth = this.auth_store.getAuth
+
+    } else {
+      this.auth = null
     }
   },
   components: {
